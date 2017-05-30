@@ -1,0 +1,30 @@
+{
+  "name": "angular-table2accordian",
+  "authors": [
+    "Karthik Balu <kbalu@clofus.com>"
+  ],
+  "description": "Responsive table to accordian converter using angularjs and boostrap",
+  "main": "./table2accordian.js, ",
+  "keywords": [
+    "angular",
+    "boostrap",
+    "accordian",
+    "table",
+    "table",
+    "to",
+    "accordian",
+    "responsive",
+    "mobile",
+    "responsive",
+    "table"
+  ],
+  "license": "MIT",
+  "homepage": "https://www.clofusinnovations.com",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

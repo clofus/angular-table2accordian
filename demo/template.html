@@ -1,0 +1,23 @@
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+  <div class="panel panel-default" ng-repeat="tr in tabledata track by $index">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a data-target="#collapseOne{{$index}}"  role="button" data-toggle="collapse" data-parent="#accordion"  aria-expanded="false" aria-controls="collapseOne">
+          {{fetchFirstValue(tr)[0]}} - {{fetchFirstValue(tr)[1]}}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne{{$index}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+
+        <dl class="col-lg-6 col-md-6 col-sm-6 col-xs-6" ng-repeat="(key, value) in tr track by $index">
+          <dt>{{key}}</dt>
+          <dd>{{value}}</dd>
+        </dl>
+
+      </div>
+    </div>
+  </div>
+
+</div>

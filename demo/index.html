@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html ng-app="demotable2accordian">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>AngularJS Table to Mobile Responsive Accordian Demo</title>
+    <script data-require="jquery@*" data-semver="3.1.1" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    
+    <link data-require="bootstrap@3.3.7" data-semver="3.3.7" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script data-require="bootstrap@3.3.7" data-semver="3.3.7" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="style.css" />
+    
+    <script data-require="angular.js@1.4.x" src="https://code.angularjs.org/1.4.12/angular.js" data-semver="1.4.9"></script>
+    
+	<script src="../table2accordian.js"></script>
+	
+    <script src="app.js"></script>
+  </head>
+
+  <body ng-controller="MainCtrl">
+    <p>Hello {{name}}!</p>
+
+    
+
+    <table class="table">
+      <thead>
+        <tr class="text-capitalize">
+          <th>Exam</th>
+          <th class="text-center" ng-repeat="subject in allsubjects track by $index">{{subject.subject_name}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="exam in allexams">
+          <td>{{exam.exam_name}}</td>
+          <td class="text-center" ng-repeat="subject in allsubjects">{{getmarks(subject,exam)}}</td>
+        </tr>
+      </tbody>
+    </table>
+    
+
+    
+  </body>
+
+</html>
