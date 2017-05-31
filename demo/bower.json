@@ -1,0 +1,20 @@
+{
+  "name": "demo",
+  "homepage": "https://github.com/clofus/angular-table2accordian",
+  "authors": [
+    "Karthik Balu <kbalu@clofus.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-table2accordian": "*"
+  }
+}
