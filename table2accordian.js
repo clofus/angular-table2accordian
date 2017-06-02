@@ -219,39 +219,96 @@ angular.module('clofus', [])
       function replaceTabletoAccordian(force) {
         if ($scope.windowWidth < 500 && (accordian == "" || force)) {
           $scope.tabledata = table2json($element);
-		  $scope.tabledata = $($element).tableToJSON({ignoreHiddenRows: false}); // Convert the table into a javascript object
+		  $scope.tabledata = $($element).tableToJSON({ignoreHiddenRows: false, allowHTML: true}); // Convert the table into a javascript object
 		  
-          var parentElement = $(this).parent();
-          var html = $scope.template;
+          var target = $($element).parent();
+          var html = '<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">'+
+		    '<div class="panel panel-default" ng-repeat="tr in tabledata track by $index">'+
+		      '<div class="panel-heading" role="tab" id="headingOne">'+
+		        '<h4 class="panel-title">'+
+		         ' <a href="javascript:;" data-target="#collapseOne{{$index}}" role="button" data-toggle="collapse" data-parent="#accordion" '+
+		  	  		' aria-expanded="false" aria-controls="collapseOne"  style="text-overflow: ellipsis;overflow: hidden;" ng-bind-html="fetchFirstValue(tr)[1]">'+		          
+		         ' </a>'+
+		        '</h4>'+
+		      '</div>'+
+		     ' <div id="collapseOne{{$index}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">'+
+		      '  <div class="panel-body">'+
+		         ' <dl class="col-lg-6 col-md-6 col-sm-6 col-xs-6" ng-repeat="(key, value) in tr track by $index">'+
+		          '  <dt class="text-capitalize" data-row="{{$parent.$index}}" data-col="{{$index}}" style="text-overflow: ellipsis;overflow: hidden;">{{key}}</dt>'+
+		           ' <dd class="text-capitalize" data-row="{{$parent.$index}}" data-col="{{$index}}" style="text-overflow: ellipsis;overflow: hidden;" ng-bind-html="value" compile></dd>'+
+		          '</dl>'+
+		       ' </div>'+
+		     ' </div>'+
+		    '</div>'+
+		  '</div>';
+		  
           if (accordian) {
-            accordian.empty();
+            $(accordian).empty();
           }
-          accordian = $compile(html)($scope);
-          $element.parent().append(accordian);
-          $element.hide();
+		  
+		  accordian = $compile(html)($scope)[0];
+		  target.append(accordian);
+		  
+		  $timeout(function(){
+		  	$scope.$digest();	
+		  })
+		  
+		  $element.hide();
+		  
+		  $(accordian).on("click", "dd", function (e) {
+		      console.log('a');
+			  var rowindex = $(e.currentTarget).attr("data-row");
+			  var colindex = $(e.currentTarget).attr("data-col");
+			  var tdelement = $(e.currentTarget).closest("#accordion").prev().find("tr").eq(rowindex+1).find("td").eq(colindex).html();
+			  
+			  var invoke_ngclick = $(e.target).closest("#accordion").prev().find("tr").eq(rowindex+1).find("td").eq(colindex).find('[ng-click]');
+			  
+			  $timeout(function() {
+			     $(invoke_ngclick).filter(function() {
+   			        return $(this).text() === $(e.target).text();
+   			  	 }).triggerHandler('click');
+			  });
+			  
+		  	  e.stopPropagation(); 
+		  });
+		  
 
         } else if ($scope.windowWidth < 500) {
-          accordian.show();
+          $(accordian).show();
           $element.hide();
         } else {
           if (accordian != "") {
             $element.show();
-            accordian.hide();
+            $(accordian).hide();
           }
         }
       }
+	  
 
-      $http.get("../accordiantable.html").then(function(result) {
-        $scope.template = result.data;
-        $timeout(function() {
-          $(window).resize(function() {
-            $scope.windowWidth = $(window).width();
-            replaceTabletoAccordian()
-          });
-          replaceTabletoAccordian();
-        });
+		  var waitForFinalEvent = (function () {
+		    var timers = {};
+		    return function (callback, ms, uniqueId) {
+		      if (!uniqueId) {
+		        uniqueId = "Don't call this twice without a uniqueId";
+		      }
+		      if (timers[uniqueId]) {
+		        clearTimeout (timers[uniqueId]);
+		      }
+		      timers[uniqueId] = setTimeout(callback, ms);
+		    };
+		  })();
+	
+	
+	
+		// Trigger on Resize Event
+		  $(window).resize(function () {
+		      waitForFinalEvent(function(){
+	            $scope.windowWidth = $(window).width();
+	            replaceTabletoAccordian();
+		      }, 500, "unique_string");
+		  });
 
-
+		// Trigger on DOM change event
         $scope.$watch(function() {
           return $element.html().length;
         }, function(newValue, oldValue) {
@@ -260,7 +317,6 @@ angular.module('clofus', [])
           }
         });
 		
-      });
     }
   }
 });
