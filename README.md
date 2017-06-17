@@ -7,5 +7,5 @@ Responsive table to accordian converter using angularjs and boostrap
 ## Demo
 http://plnkr.co/edit/mEPIWSr97jUYJxXvdZCB?p=preview
 
-
+## Documentationa and support
 [for more information](https://clofusinnovations.com)
